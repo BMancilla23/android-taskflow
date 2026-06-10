@@ -1,7 +1,10 @@
 package com.bryan.taskflow.domain.model
 
 data class Task(
-    val id: Int,
+    val id: Long,
     val title: String,
-    val completed: Boolean = false
+    val description: String,
+    val priority: TaskPriority,
+    val isCompleted: Boolean = false,
+    val createdAt: Long = System.currentTimeMillis()
 )
