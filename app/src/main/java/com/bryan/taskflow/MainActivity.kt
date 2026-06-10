@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import com.bryan.taskflow.presentation.login.LoginViewModel
+import com.bryan.taskflow.presentation.task.TaskViewModel
 import com.bryan.taskflow.ui.screens.HomeScreen
 import com.bryan.taskflow.ui.screens.LoginScreen
+import com.bryan.taskflow.ui.screens.TaskScreen
 import com.bryan.taskflow.ui.theme.TaskFlowTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +29,10 @@ class MainActivity : ComponentActivity() {
                             currentScreen = "home"
                         }
                     )
-                    "home" -> HomeScreen()
+//                    "home" -> HomeScreen()
+                    "home" -> TaskScreen(
+                        viewModel = TaskViewModel()
+                    )
                 }
             }
         }
