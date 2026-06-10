@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -91,11 +92,30 @@ fun TaskScreen(
                     Card(
                         modifier = Modifier.padding(8.dp)
                     ) {
+                        Checkbox(
+                            checked = task.isCompleted,
+                            onCheckedChange = {
+                                viewModel.toggleTask(task.id)
+                            }
+                        )
                         Text(
                             text = task.title,
                             // Modifier permite configurar aparicencia,
                             // tamaño, posición y comportamiento del componente
                             modifier = Modifier.padding(16.dp)
+                        )
+                        Spacer(
+                            modifier = Modifier.height(4.dp)
+                        )
+                        Text(
+                            text = task.description,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(
+                            modifier = Modifier.height(8.dp)
+                        )
+                        Text(
+                            text = "Prioridad: ${task.priority}"
                         )
                     }
                 }
