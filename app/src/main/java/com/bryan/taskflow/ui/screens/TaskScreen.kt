@@ -1,10 +1,16 @@
 package com.bryan.taskflow.ui.screens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -23,23 +29,75 @@ fun TaskScreen(
     val state by viewModel.uiState.collectAsState() // Conectar Stateflow con Compose
 
     Scaffold { innerPadding ->
-        // Lista eficiente para grandes cantidades de elementos.
-        // Solo renderiza los elementos visibles en pantalla
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(16.dp)
         ) {
-            items(state.tasks) { task ->
-                Card(
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        text = task.title,
-                        // Modifier permite configurar aparicencia,
-                        // tamaño, posición y comportamiento del componente
-                        modifier = Modifier.padding(16.dp)
-                    )
+
+            Text(
+                text = "Mis tareas",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+
+            OutlinedTextField(
+                value = state.newTaskTitle,
+                onValueChange = viewModel::onTaskTitleChange,
+                label = {
+                    Text("Título")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+            OutlinedTextField(
+                value = state.newTaskDescription,
+                onValueChange = viewModel::onTaskDescriptionChange,
+                label = {
+                    Text("Descripción")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+            Button(
+                onClick = {
+                    viewModel.addTask()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Crear tarea")
+            }
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            // Lista eficiente para grandes cantidades de elementos.
+            // Solo renderiza los elementos visibles en pantalla
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding()
+            ) {
+                items(state.tasks) { task ->
+                    Card(
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text(
+                            text = task.title,
+                            // Modifier permite configurar aparicencia,
+                            // tamaño, posición y comportamiento del componente
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
         }
