@@ -1,6 +1,7 @@
 package com.bryan.taskflow.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.bryan.taskflow.domain.model.displayName
 import com.bryan.taskflow.presentation.task.TaskViewModel
 
 @Composable
@@ -85,38 +87,53 @@ fun TaskScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding()
             ) {
                 items(state.tasks) { task ->
+
                     Card(
                         modifier = Modifier.padding(8.dp)
                     ) {
-                        Checkbox(
-                            checked = task.isCompleted,
-                            onCheckedChange = {
-                                viewModel.toggleTask(task.id)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+
+                            Checkbox(
+                                checked = task.isCompleted,
+                                onCheckedChange = {
+                                    viewModel.toggleTask(task.id)
+                                }
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 12.dp)
+                            ) {
+
+                                Text(
+                                    text = task.title,
+                                    // Modifier permite configurar aparicencia,
+                                    // tamaño, posición y comportamiento del componente
+                                    modifier = Modifier.padding(16.dp),
+                                    style = MaterialTheme.typography.titleMedium
+
+                                )
+                                Spacer(
+                                    modifier = Modifier.height(4.dp)
+                                )
+                                Text(
+                                    text = task.description,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(
+                                    modifier = Modifier.height(8.dp)
+                                )
+                                Text(
+                                    text = "Prioridad: ${task.priority.displayName()}"
+                                )
                             }
-                        )
-                        Text(
-                            text = task.title,
-                            // Modifier permite configurar aparicencia,
-                            // tamaño, posición y comportamiento del componente
-                            modifier = Modifier.padding(16.dp)
-                        )
-                        Spacer(
-                            modifier = Modifier.height(4.dp)
-                        )
-                        Text(
-                            text = task.description,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Spacer(
-                            modifier = Modifier.height(8.dp)
-                        )
-                        Text(
-                            text = "Prioridad: ${task.priority}"
-                        )
+                        }
                     }
                 }
             }
