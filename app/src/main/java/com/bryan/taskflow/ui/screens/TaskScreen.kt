@@ -18,7 +18,7 @@ fun TaskScreen(
     viewModel: TaskViewModel
 ) {
     // Convierte el StateFLow en un State de Compose.
-    // Cuando uiState cambia, la pantalla se recomienda automáticamente.
+    // Cuando uiState cambia, la pantalla se recompone automáticamente.
     // by evita usar .value
     val state by viewModel.uiState.collectAsState() // Conectar Stateflow con Compose
 
