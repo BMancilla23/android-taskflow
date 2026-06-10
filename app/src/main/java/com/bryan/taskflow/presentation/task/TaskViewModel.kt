@@ -86,4 +86,18 @@ class TaskViewModel: ViewModel(){
             selectedPriority = TaskPriority.MEDIUM
         )
     }
+
+    fun toggleTask(taskId: Long){
+        _uiState.value = _uiState.value.copy(
+            tasks = _uiState.value.tasks.map { task ->
+                if(task.id == taskId){
+                    task.copy(
+                        isCompleted = !task.isCompleted
+                    )
+                }else {
+                    task
+                }
+            }
+        )
+    }
 }
