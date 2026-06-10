@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.bryan.taskflow.domain.model.TaskPriority
 import com.bryan.taskflow.domain.model.displayName
 import com.bryan.taskflow.presentation.task.TaskViewModel
 
@@ -40,20 +42,16 @@ fun TaskScreen(
         ) {
 
             Text(
-                text = "Mis tareas",
-                style = MaterialTheme.typography.headlineMedium
+                text = "Mis tareas", style = MaterialTheme.typography.headlineMedium
             )
             Spacer(
                 modifier = Modifier.height(16.dp)
             )
 
             OutlinedTextField(
-                value = state.newTaskTitle,
-                onValueChange = viewModel::onTaskTitleChange,
-                label = {
+                value = state.newTaskTitle, onValueChange = viewModel::onTaskTitleChange, label = {
                     Text("Título")
-                },
-                modifier = Modifier.fillMaxWidth()
+                }, modifier = Modifier.fillMaxWidth()
             )
             Spacer(
                 modifier = Modifier.height(8.dp)
@@ -66,14 +64,34 @@ fun TaskScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+            Text(
+                text = "Prioridad", style = MaterialTheme.typography.titleSmall
+            )
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+            // TaskPriority.entries devuelve todos los valores del enum.
+            // Se usa para generar los chips dinámicamente sin escribirlos manualmente.
+            Row {
+                TaskPriority.entries.forEach { priority ->
+                    FilterChip(selected = state.selectedPriority == priority, onClick = {
+                        viewModel.onPriorityChange(priority)
+                    }, label = {
+                        Text(priority.displayName())
+                    })
+                }
+            }
             Spacer(
                 modifier = Modifier.height(16.dp)
             )
             Button(
                 onClick = {
                     viewModel.addTask()
-                },
-                modifier = Modifier.fillMaxWidth()
+                }, modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Crear tarea")
             }
@@ -84,9 +102,13 @@ fun TaskScreen(
 
             // Lista eficiente para grandes cantidades de elementos.
             // Solo renderiza los elementos visibles en pantalla
+            // weight(1f) ocupa todo el espacio restante dentro de la Column.
+            // Sin weight, la LazyColumn puede quedarse sin espacio o provocar
+            // problemas de scroll al coexistir con otros componentes.
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
                 items(state.tasks) { task ->
 
@@ -100,23 +122,19 @@ fun TaskScreen(
                         ) {
 
                             Checkbox(
-                                checked = task.isCompleted,
-                                onCheckedChange = {
+                                checked = task.isCompleted, onCheckedChange = {
                                     viewModel.toggleTask(task.id)
-                                }
-                            )
+                                })
                             Column(
+                                // Modifier permite configurar aparicencia,
+                                // tamaño, posición y comportamiento del componente
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(start = 12.dp)
                             ) {
 
                                 Text(
-                                    text = task.title,
-                                    // Modifier permite configurar aparicencia,
-                                    // tamaño, posición y comportamiento del componente
-                                    modifier = Modifier.padding(16.dp),
-                                    style = MaterialTheme.typography.titleMedium
+                                    text = task.title, style = MaterialTheme.typography.titleMedium
 
                                 )
                                 Spacer(
