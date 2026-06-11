@@ -11,9 +11,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.bryan.taskflow.presentation.login.LoginViewModel
@@ -27,7 +30,8 @@ import com.bryan.taskflow.presentation.login.LoginViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onNavigationToRegister: () -> Unit
 ){
    val state by viewModel.uiState.collectAsState()
 
@@ -61,6 +65,7 @@ fun LoginScreen(
             label = {
                 Text("Password")
             },
+            visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -71,6 +76,11 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Login")
+        }
+        TextButton(
+            onClick = onNavigationToRegister
+        ) {
+            Text("¿No tienes cuenta? Registrarse")
         }
         state.error?.let {
             Spacer(modifier = Modifier.height(12.dp))
