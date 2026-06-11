@@ -3,6 +3,7 @@ package com.bryan.taskflow.data.repository
 import com.bryan.taskflow.data.local.dao.UserDao
 import com.bryan.taskflow.data.local.entity.UserEntity
 import com.bryan.taskflow.data.local.entity.toDomain
+import com.bryan.taskflow.data.security.PasswordHasher
 import com.bryan.taskflow.domain.model.User
 import com.bryan.taskflow.domain.repository.UserRepository
 
@@ -18,11 +19,12 @@ class UserRepositoryImpl(private val userDao: UserDao): UserRepository{
                 Exception("El usuario ya existe")
             )
         }
+        val hashedPassword = PasswordHasher.hash(password)
         userDao.insert(
             UserEntity(
                 fullName = fullName,
                 email = email,
-                password = password
+                password = hashedPassword
             )
         )
 
@@ -41,7 +43,13 @@ class UserRepositoryImpl(private val userDao: UserDao): UserRepository{
             )
         }
 
-        if(user.password != password){
+//        if(user.password != password){
+//            return Result.failure(
+//                Exception("Contraseña incorrecta")
+//            )
+//        }
+
+        if (!PasswordHasher.verify(password, user.password)){
             return Result.failure(
                 Exception("Contraseña incorrecta")
             )
