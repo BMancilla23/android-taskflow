@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bryan.taskflow.data.session.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SplashViewModel(private val sessionManager: SessionManager): ViewModel() {
@@ -16,15 +17,13 @@ class SplashViewModel(private val sessionManager: SessionManager): ViewModel() {
     }
  private fun checkSession(){
      viewModelScope.launch {
-         sessionManager
-             .isLoggedIn()
-             .collect { isLoggedIn ->
-                 _uiState.value =
-                     SplashUiState(
+         val isLoggedIn = sessionManager
+             .isLoggedIn().first()
+
+         _uiState.value =  SplashUiState(
                          isLoading = false,
                          isLoggedIn = isLoggedIn
                      )
-             }
      }
  }
 }
