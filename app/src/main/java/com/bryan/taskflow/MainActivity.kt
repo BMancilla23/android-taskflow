@@ -8,8 +8,10 @@ import androidx.compose.runtime.*
 import com.bryan.taskflow.data.repository.RepositoryProvider
 import com.bryan.taskflow.data.session.SessionManager
 import com.bryan.taskflow.data.session.SessionProvider
+import com.bryan.taskflow.navigation.Screen
 import com.bryan.taskflow.presentation.login.LoginViewModel
 import com.bryan.taskflow.presentation.login.RegisterViewModel
+import com.bryan.taskflow.presentation.splash.SplashScreen
 import com.bryan.taskflow.presentation.task.TaskViewModel
 import com.bryan.taskflow.ui.screens.HomeScreen
 import com.bryan.taskflow.ui.screens.LoginScreen
@@ -36,46 +38,61 @@ class MainActivity : ComponentActivity() {
                 val registerViewModel = remember {
                     RegisterViewModel(userRepository)
                 }
-                enableEdgeToEdge()
+
+                val taskViewModel = remember {
+                    TaskViewModel()
+                }
 
                 val isLoggedIn by sessionManager
                     .isLoggedIn()
                     .collectAsState(initial = false)
 
                 var currentScreen by remember {
-                    mutableStateOf("login")
+//                    mutableStateOf("login")
+                    mutableStateOf<Screen>(
+                        Screen.Splash
+                    )
                 }
 
                 LaunchedEffect(isLoggedIn) {
-                    if (isLoggedIn){
-                        currentScreen = "home"
-                    }
+//                    if (isLoggedIn){
+//                        currentScreen = "home"
+//                    }
+                    currentScreen =
+                        if (isLoggedIn){
+                            Screen.Tasks
+                        }else {
+                            Screen.Login
+                        }
                 }
 
                 when(currentScreen){
-                    "login" -> LoginScreen(
+                    Screen.Splash -> {
+                        SplashScreen()
+                    }
+                    Screen.Login -> LoginScreen(
 //                        viewModel = LoginViewModel(),
                         viewModel = loginViewModel,
                         onLoginSuccess = {
-                            currentScreen = "home"
+                            currentScreen = Screen.Tasks
                         },
                         onNavigationToRegister = {
-                            currentScreen = "register"
+                            currentScreen = Screen.Register
                         }
                     )
-                    "register"-> RegisterScreen(
+                    Screen.Register-> RegisterScreen(
 //                        viewModel = RegisterViewModel(),
                         viewModel = registerViewModel,
                         onRegisterSuccess = {
-                            currentScreen = "login"
+                            currentScreen = Screen.Login
                         },
                         onNavigationToLogin = {
-                            currentScreen = "login"
+                            currentScreen = Screen.Login
                         }
                     )
 //                    "home" -> HomeScreen()
-                    "home" -> TaskScreen(
-                        viewModel = TaskViewModel()
+                    Screen.Tasks -> TaskScreen(
+                        viewModel = taskViewModel
                     )
                 }
             }
