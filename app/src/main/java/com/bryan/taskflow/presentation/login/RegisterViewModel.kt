@@ -3,11 +3,14 @@ package com.bryan.taskflow.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bryan.taskflow.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterViewModel(
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
     private val userRepository: UserRepository
 ): ViewModel(){
     private val _uiState = MutableStateFlow(RegisterUiState())

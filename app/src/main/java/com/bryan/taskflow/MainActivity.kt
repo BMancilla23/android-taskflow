@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bryan.taskflow.data.repository.RepositoryProvider
 import com.bryan.taskflow.data.session.SessionManager
 import com.bryan.taskflow.data.session.SessionProvider
@@ -19,7 +20,9 @@ import com.bryan.taskflow.ui.screens.LoginScreen
 import com.bryan.taskflow.ui.screens.RegisterScreen
 import com.bryan.taskflow.ui.screens.TaskScreen
 import com.bryan.taskflow.ui.theme.TaskFlowTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +41,9 @@ class MainActivity : ComponentActivity() {
                  * Similar a useMemo en React.
                  * Conserva la instancia entre recomposiciones
                  */
-                val userRepository = remember {
-                    RepositoryProvider.provideUserRepository(this@MainActivity)
-                }
+//                val userRepository = remember {
+//                    RepositoryProvider.provideUserRepository(this@MainActivity)
+//                }
 
                 /**
                  * SessionManager encapsula el acceso a DataStore.
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
                  * del sistema Android que requiere acceso al
                  * almacenamiento interno de la aplicación
                  */
-                val sessionManager = SessionProvider.provide(this@MainActivity)
+//                val sessionManager = SessionProvider.provide(this@MainActivity)
 
                 /**
                  * Los ViewModels reciben sus dependencias por
@@ -58,21 +61,21 @@ class MainActivity : ComponentActivity() {
                  * Esto evita que el ViewModel cree sus propias
                  * dependencias y facilita pruebas y mantenimiento.
                  */
-                val loginViewModel = remember {
-                    LoginViewModel(userRepository, sessionManager)
-                }
+//                val loginViewModel = remember {
+//                    LoginViewModel(userRepository, sessionManager)
+//                }
 
-                val splashViewModel = remember {
-                    SplashViewModel(sessionManager)
-                }
+//                val splashViewModel = remember {
+//                    SplashViewModel(sessionManager)
+//                }
 
-                val registerViewModel = remember {
-                    RegisterViewModel(userRepository)
-                }
+//                val registerViewModel = remember {
+//                    RegisterViewModel(userRepository)
+//                }
 
-                val taskViewModel = remember {
-                    TaskViewModel()
-                }
+//                val taskViewModel = remember {
+//                    TaskViewModel()
+//                }
 
 
                 /**
@@ -112,7 +115,8 @@ class MainActivity : ComponentActivity() {
                 when (currentScreen) {
                     Screen.Splash -> {
                         SplashScreen(
-                            viewModel = splashViewModel,
+//                            viewModel = splashViewModel,
+                            viewModel = hiltViewModel(),
                             onNavigateToLogin = {
                                 currentScreen = Screen.Login
                             },
@@ -124,7 +128,8 @@ class MainActivity : ComponentActivity() {
 
                     Screen.Login -> LoginScreen(
 //                        viewModel = LoginViewModel(),
-                        viewModel = loginViewModel,
+//                        viewModel = loginViewModel,
+                        viewModel = hiltViewModel(),
                         onLoginSuccess = {
                             currentScreen = Screen.Tasks
                         },
@@ -135,7 +140,8 @@ class MainActivity : ComponentActivity() {
 
                     Screen.Register -> RegisterScreen(
 //                        viewModel = RegisterViewModel(),
-                        viewModel = registerViewModel,
+//                        viewModel = registerViewModel,
+                        viewModel = hiltViewModel(),
                         onRegisterSuccess = {
                             currentScreen = Screen.Login
                         },
@@ -145,7 +151,8 @@ class MainActivity : ComponentActivity() {
                     )
 //                    "home" -> HomeScreen()
                     Screen.Tasks -> TaskScreen(
-                        viewModel = taskViewModel
+//                        viewModel = taskViewModel
+                        viewModel = hiltViewModel()
                     )
                 }
             }

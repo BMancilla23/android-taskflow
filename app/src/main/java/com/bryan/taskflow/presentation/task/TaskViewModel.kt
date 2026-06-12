@@ -3,10 +3,13 @@ package com.bryan.taskflow.presentation.task
 import androidx.lifecycle.ViewModel
 import com.bryan.taskflow.domain.model.Task
 import com.bryan.taskflow.domain.model.TaskPriority
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class TaskViewModel: ViewModel(){
+@HiltViewModel
+class TaskViewModel @Inject constructor(): ViewModel(){
     // Estado interno mutabla
     // Solo el ViewModel puede modificarlo
     private val _uiState = MutableStateFlow(

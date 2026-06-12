@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bryan.taskflow.data.session.SessionManager
 import com.bryan.taskflow.domain.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Maneja la lógica de presentación del login.
@@ -17,7 +19,8 @@ import kotlinx.coroutines.launch
  * de la UI separado de los composables.
  *
  */
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager
 ) : ViewModel() {
