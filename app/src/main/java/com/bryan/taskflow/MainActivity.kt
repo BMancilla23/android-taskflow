@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import com.bryan.taskflow.data.repository.RepositoryProvider
+import com.bryan.taskflow.data.session.SessionManager
+import com.bryan.taskflow.data.session.SessionProvider
 import com.bryan.taskflow.presentation.login.LoginViewModel
 import com.bryan.taskflow.presentation.login.RegisterViewModel
 import com.bryan.taskflow.presentation.task.TaskViewModel
@@ -25,16 +27,29 @@ class MainActivity : ComponentActivity() {
                    RepositoryProvider.provideUserRepository(this@MainActivity)
                }
 
+                val sessionManager = SessionProvider.provide(this@MainActivity)
+
                 val loginViewModel = remember {
-                    LoginViewModel(userRepository)
+                    LoginViewModel(userRepository, sessionManager)
                 }
 
                 val registerViewModel = remember {
                     RegisterViewModel(userRepository)
                 }
+                enableEdgeToEdge()
+
+                val isLoggedIn by sessionManager
+                    .isLoggedIn()
+                    .collectAsState(initial = false)
 
                 var currentScreen by remember {
                     mutableStateOf("login")
+                }
+
+                LaunchedEffect(isLoggedIn) {
+                    if (isLoggedIn){
+                        currentScreen = "home"
+                    }
                 }
 
                 when(currentScreen){
