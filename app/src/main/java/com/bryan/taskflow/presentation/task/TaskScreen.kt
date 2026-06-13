@@ -8,10 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -89,10 +94,30 @@ fun TaskScreen(
             )
             Button(
                 onClick = {
-                    viewModel.addTask()
+//                    viewModel.addTask()
+                    viewModel.saveTask()
                 }, modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Crear tarea")
+                Text(
+//                    "Crear tarea"
+                    if (state.editingTask == null) "Crear tarea"
+                    else "Actualizar tarea"
+                )
+            }
+
+            if(state.editingTask != null){
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+
+                Button(
+                    onClick = {
+                        viewModel.cancelEdit()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Cancelar edición")
+                }
             }
 
             Spacer(
@@ -128,7 +153,7 @@ fun TaskScreen(
                                 // Modifier permite configurar aparicencia,
                                 // tamaño, posición y comportamiento del componente
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .weight(1f)
                                     .padding(start = 12.dp)
                             ) {
 
@@ -148,6 +173,26 @@ fun TaskScreen(
                                 )
                                 Text(
                                     text = "Prioridad: ${task.priority.displayName()}"
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    viewModel.startEdit(task)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Editar"
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    viewModel.deleteTask(task)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Eliminar"
                                 )
                             }
                         }

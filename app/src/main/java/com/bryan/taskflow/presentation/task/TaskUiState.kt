@@ -9,5 +9,7 @@ data class TaskUiState(
     val newTaskDescription: String = "",
     val selectedPriority: TaskPriority = TaskPriority.MEDIUM,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+
+    val editingTask: Task? = null
 )
