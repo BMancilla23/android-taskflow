@@ -1,4 +1,4 @@
-package com.bryan.taskflow.ui.screens
+package com.bryan.taskflow.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,10 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import com.bryan.taskflow.presentation.login.LoginViewModel
 
 /**
  * Pantalla de autenticación

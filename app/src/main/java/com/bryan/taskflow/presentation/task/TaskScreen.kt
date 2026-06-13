@@ -1,4 +1,4 @@
-package com.bryan.taskflow.ui.screens
+package com.bryan.taskflow.presentation.task
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bryan.taskflow.domain.model.TaskPriority
 import com.bryan.taskflow.domain.model.displayName
-import com.bryan.taskflow.presentation.task.TaskViewModel
 
 @Composable
 fun TaskScreen(

@@ -1,4 +1,4 @@
-package com.bryan.taskflow.presentation.login
+package com.bryan.taskflow.presentation.register
 
 data class RegisterUiState (
     val fullName: String = "",

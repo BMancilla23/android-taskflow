@@ -6,19 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.bryan.taskflow.data.repository.RepositoryProvider
-import com.bryan.taskflow.data.session.SessionManager
-import com.bryan.taskflow.data.session.SessionProvider
 import com.bryan.taskflow.navigation.Screen
-import com.bryan.taskflow.presentation.login.LoginViewModel
-import com.bryan.taskflow.presentation.login.RegisterViewModel
 import com.bryan.taskflow.presentation.splash.SplashScreen
-import com.bryan.taskflow.presentation.splash.SplashViewModel
-import com.bryan.taskflow.presentation.task.TaskViewModel
-import com.bryan.taskflow.ui.screens.HomeScreen
-import com.bryan.taskflow.ui.screens.LoginScreen
-import com.bryan.taskflow.ui.screens.RegisterScreen
-import com.bryan.taskflow.ui.screens.TaskScreen
+import com.bryan.taskflow.presentation.login.LoginScreen
+import com.bryan.taskflow.presentation.register.RegisterScreen
+import com.bryan.taskflow.presentation.task.TaskScreen
 import com.bryan.taskflow.ui.theme.TaskFlowTheme
 import dagger.hilt.android.AndroidEntryPoint
 

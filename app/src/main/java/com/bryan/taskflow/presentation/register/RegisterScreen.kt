@@ -1,4 +1,4 @@
-package com.bryan.taskflow.ui.screens
+package com.bryan.taskflow.presentation.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.bryan.taskflow.presentation.login.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
