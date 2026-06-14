@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.bryan.taskflow.navigation.AppNavHost
 import com.bryan.taskflow.navigation.Screen
 import com.bryan.taskflow.presentation.splash.SplashScreen
 import com.bryan.taskflow.presentation.login.LoginScreen
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TaskFlowTheme {
+                AppNavHost()
                 /**
                  * remember conserva un objeto entre recomposiciones.
                  *
@@ -79,12 +81,12 @@ class MainActivity : ComponentActivity() {
                  * Screen es una sealed class que nos permite
                  * navegación tipada y evita errores por strings.
                  */
-                var currentScreen by remember {
-//                    mutableStateOf("login")
-                    mutableStateOf<Screen>(
-                        Screen.Splash
-                    )
-                }
+//                var currentScreen by remember {
+////                    mutableStateOf("login")
+//                    mutableStateOf<Screen>(
+//                        Screen.Splash
+//                    )
+//                }
 
 
                 /**
@@ -104,49 +106,49 @@ class MainActivity : ComponentActivity() {
                  * Vue:
                  * <router-view>
                  */
-                when (currentScreen) {
-                    Screen.Splash -> {
-                        SplashScreen(
-//                            viewModel = splashViewModel,
-                            viewModel = hiltViewModel(),
-                            onNavigateToLogin = {
-                                currentScreen = Screen.Login
-                            },
-                            onNavigateToTasks = {
-                                currentScreen = Screen.Tasks
-                            }
-                        )
-                    }
-
-                    Screen.Login -> LoginScreen(
-//                        viewModel = LoginViewModel(),
-//                        viewModel = loginViewModel,
-                        viewModel = hiltViewModel(),
-                        onLoginSuccess = {
-                            currentScreen = Screen.Tasks
-                        },
-                        onNavigationToRegister = {
-                            currentScreen = Screen.Register
-                        }
-                    )
-
-                    Screen.Register -> RegisterScreen(
-//                        viewModel = RegisterViewModel(),
-//                        viewModel = registerViewModel,
-                        viewModel = hiltViewModel(),
-                        onRegisterSuccess = {
-                            currentScreen = Screen.Login
-                        },
-                        onNavigationToLogin = {
-                            currentScreen = Screen.Login
-                        }
-                    )
-//                    "home" -> HomeScreen()
-                    Screen.Tasks -> TaskScreen(
-//                        viewModel = taskViewModel
-                        viewModel = hiltViewModel()
-                    )
-                }
+//                when (currentScreen) {
+//                    Screen.Splash -> {
+//                        SplashScreen(
+////                            viewModel = splashViewModel,
+//                            viewModel = hiltViewModel(),
+//                            onNavigateToLogin = {
+//                                currentScreen = Screen.Login
+//                            },
+//                            onNavigateToTasks = {
+//                                currentScreen = Screen.Tasks
+//                            }
+//                        )
+//                    }
+//
+//                    Screen.Login -> LoginScreen(
+////                        viewModel = LoginViewModel(),
+////                        viewModel = loginViewModel,
+//                        viewModel = hiltViewModel(),
+//                        onLoginSuccess = {
+//                            currentScreen = Screen.Tasks
+//                        },
+//                        onNavigationToRegister = {
+//                            currentScreen = Screen.Register
+//                        }
+//                    )
+//
+//                    Screen.Register -> RegisterScreen(
+////                        viewModel = RegisterViewModel(),
+////                        viewModel = registerViewModel,
+//                        viewModel = hiltViewModel(),
+//                        onRegisterSuccess = {
+//                            currentScreen = Screen.Login
+//                        },
+//                        onNavigationToLogin = {
+//                            currentScreen = Screen.Login
+//                        }
+//                    )
+////                    "home" -> HomeScreen()
+//                    Screen.Tasks -> TaskScreen(
+////                        viewModel = taskViewModel
+//                        viewModel = hiltViewModel()
+//                    )
+//                }
             }
         }
     }
