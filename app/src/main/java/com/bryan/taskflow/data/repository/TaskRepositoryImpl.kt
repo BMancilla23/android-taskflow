@@ -23,6 +23,12 @@ class TaskRepositoryImpl (
            }
     }
 
+    override suspend fun getTaskById(taskId: Long): Task? {
+      return taskDao
+          .getById(taskId)
+          ?.toDomain()
+    }
+
     override suspend fun createTask(
         title: String,
         description: String,

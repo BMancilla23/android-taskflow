@@ -9,6 +9,10 @@ interface TaskRepository {
         userId: Long
     ): Flow<List<Task>>
 
+    suspend fun getTaskById(
+        taskId: Long
+    ): Task?
+
     suspend fun createTask(
         title: String,
         description: String,
