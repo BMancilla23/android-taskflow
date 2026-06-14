@@ -25,13 +25,14 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     onNavigationToLogin: () -> Unit
 ) {
-  val state by viewModel.uiState.collectAsState()
-    if(state.isRegistered){
+    val state by viewModel.uiState.collectAsState()
+    if (state.isRegistered) {
         onRegisterSuccess()
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(24.dp),
         verticalArrangement = Arrangement.Center
     ) {
