@@ -9,6 +9,8 @@ import com.bryan.taskflow.presentation.login.LoginScreen
 import com.bryan.taskflow.presentation.register.RegisterScreen
 import com.bryan.taskflow.presentation.splash.SplashScreen
 import com.bryan.taskflow.presentation.task.TaskScreen
+import com.bryan.taskflow.presentation.task.create.CreateTaskScreen
+import com.bryan.taskflow.presentation.task.edit.EditTaskScreen
 
 @Composable
 fun AppNavHost() {
@@ -68,7 +70,44 @@ fun AppNavHost() {
 
         composable(Screen.Tasks.route){
             TaskScreen(
-                viewModel = hiltViewModel()
+                viewModel = hiltViewModel(),
+                onNavigateToCreate = {
+                    navController.navigate(Screen.CreateTask.route
+                    )
+                },
+                onNavigateToEdit = {
+                    taskId ->
+                    navController.navigate(
+                        Screen.EditTask.createRoute(taskId)
+                    )
+                }
+
+            )
+        }
+
+        composable(Screen.CreateTask.route) {
+            CreateTaskScreen(
+                viewModel = hiltViewModel(),
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable(route = Screen.EditTask.route) {
+            backStackEntry ->
+            val taskId = backStackEntry
+                .arguments
+                ?.getString("taskId")
+                ?.toLongOrNull()
+                ?: return@composable
+
+            EditTaskScreen(
+                viewModel = hiltViewModel(),
+                taskId = taskId,
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }

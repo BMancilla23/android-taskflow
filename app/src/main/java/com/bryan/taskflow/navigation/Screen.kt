@@ -12,5 +12,10 @@ sealed class Screen(
     data object Login : Screen("login")
     data object Register : Screen("register")
     data object Tasks : Screen("tasks")
-
+    data object CreateTask : Screen("tasks/create")
+    data object EditTask : Screen("tasks/edit/{taskId}"){
+        fun createRoute(
+            taskId: Long
+        ) = "tasks/edit/$taskId"
+    }
 }
