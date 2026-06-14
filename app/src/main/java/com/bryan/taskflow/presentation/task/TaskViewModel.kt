@@ -75,6 +75,24 @@ class TaskViewModel @Inject constructor(
        }
     }
 
+    private var currentTask: Task? = null
+
+    fun loadTask(taskId: Long){
+        viewModelScope.launch {
+            val task = taskRepository
+                .getTaskById(taskId)
+                ?: return@launch
+
+            currentTask = task
+
+            _uiState.value = _uiState.value.copy(
+                newTaskTitle = task.title,
+                newTaskDescription = task.description,
+                selectedPriority = task.priority
+            )
+        }
+    }
+
     fun onTaskTitleChange(title: String){
         _uiState.value = _uiState.value.copy(
             newTaskTitle = title
@@ -93,24 +111,72 @@ class TaskViewModel @Inject constructor(
         )
     }
 
-    fun startEdit(task: Task){
-        _uiState.value =
-            _uiState.value.copy(
-                editingTask = task,
-                newTaskTitle = task.title,
-                newTaskDescription = task.description,
-                selectedPriority = task.priority
+//    fun startEdit(task: Task){
+//        _uiState.value =
+//            _uiState.value.copy(
+//                editingTask = task,
+//                newTaskTitle = task.title,
+//                newTaskDescription = task.description,
+//                selectedPriority = task.priority
+//            )
+//    }
+
+//    fun cancelEdit(){
+//        _uiState.value =
+//            _uiState.value.copy(
+//                editingTask = null,
+//                newTaskTitle = "",
+//                newTaskDescription = "",
+//                selectedPriority = TaskPriority.MEDIUM
+//            )
+//    }
+
+    fun createTask() {
+        val state = _uiState.value
+
+        if(state.newTaskTitle.isBlank()){
+            return
+        }
+
+        viewModelScope.launch {
+            val userId = sessionManager.getUserId()
+                .firstOrNull()
+                ?: return@launch
+
+            taskRepository.createTask(
+                title = state.newTaskTitle,
+                description = state.newTaskDescription,
+                priority = state.selectedPriority,
+                userId = userId
             )
+        }
     }
 
-    fun cancelEdit(){
-        _uiState.value =
-            _uiState.value.copy(
-                editingTask = null,
-                newTaskTitle = "",
-                newTaskDescription = "",
-                selectedPriority = TaskPriority.MEDIUM
+    fun updateTask(){
+        val state = _uiState.value
+
+        if(state.newTaskTitle.isBlank()){
+            return
+        }
+
+        val task = currentTask ?: return
+
+        viewModelScope.launch {
+            val userId = sessionManager
+                .getUserId()
+                .firstOrNull()
+                ?: return@launch
+
+            taskRepository.updateTask(
+                task.copy(
+                    title = state.newTaskTitle,
+                    description = state.newTaskDescription,
+                    priority = state.selectedPriority
+                ),
+                userId
             )
+            clearForm()
+        }
     }
 
 //    fun addTask(){
@@ -165,42 +231,42 @@ class TaskViewModel @Inject constructor(
 ////        )
 //    }
 
-    fun saveTask(){
-        val state = _uiState.value
-
-        if(state.newTaskTitle.isBlank()){
-            return
-        }
-
-        viewModelScope.launch {
-            val userId = sessionManager
-                .getUserId()
-                .firstOrNull()
-                ?: return@launch
-
-            val editingTask = state.editingTask
-
-            if (editingTask == null){
-                taskRepository.createTask(
-                    title = state.newTaskTitle,
-                    description = state.newTaskDescription,
-                    priority = state.selectedPriority,
-                    userId = userId
-                )
-            } else {
-                taskRepository.updateTask(
-                    editingTask.copy(
-                        title = state.newTaskTitle,
-                        description = state.newTaskDescription,
-                        priority = state.selectedPriority,
-                    ),
-                    userId
-                )
-            }
-
-            cancelEdit()
-        }
-    }
+//    fun saveTask(){
+//        val state = _uiState.value
+//
+//        if(state.newTaskTitle.isBlank()){
+//            return
+//        }
+//
+//        viewModelScope.launch {
+//            val userId = sessionManager
+//                .getUserId()
+//                .firstOrNull()
+//                ?: return@launch
+//
+//            val editingTask = state.editingTask
+//
+//            if (editingTask == null){
+//                taskRepository.createTask(
+//                    title = state.newTaskTitle,
+//                    description = state.newTaskDescription,
+//                    priority = state.selectedPriority,
+//                    userId = userId
+//                )
+//            } else {
+//                taskRepository.updateTask(
+//                    editingTask.copy(
+//                        title = state.newTaskTitle,
+//                        description = state.newTaskDescription,
+//                        priority = state.selectedPriority,
+//                    ),
+//                    userId
+//                )
+//            }
+//
+//            cancelEdit()
+//        }
+//    }
 
     fun toggleTask(taskId: Long){
 //        _uiState.value = _uiState.value.copy(
@@ -232,5 +298,14 @@ class TaskViewModel @Inject constructor(
                 userId
             )
         }
+    }
+
+    private fun clearForm(){
+        _uiState.value =
+            _uiState.value.copy(
+                newTaskTitle = "",
+                newTaskDescription = "",
+                selectedPriority = TaskPriority.MEDIUM
+            )
     }
 }
