@@ -3,15 +3,16 @@ package com.bryan.taskflow.presentation.task
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,6 +34,17 @@ fun TaskScreen(
     // by evita usar .value
     val state by viewModel.uiState.collectAsState() // Conectar Stateflow con Compose
     val pendingTasks = state.tasks.count { !it.isCompleted }
+
+    val filteredTasks = state.tasks.filter {
+        task -> task.title.contains(
+            state.searchQuery,
+            ignoreCase = true
+        ) ||
+            task.description.contains(
+                state.searchQuery,
+                ignoreCase = true
+            )
+    }
 
     ScreenLayout(
         title = "Mis tareas",
@@ -79,10 +91,22 @@ fun TaskScreen(
             }
 
             Spacer(Modifier.height(16.dp))
+            OutlinedTextField(
+                value = state.searchQuery,
+                onValueChange = viewModel::onSearchQueryChange,
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                placeholder = {
+                    Text("Buscar tareas")
+                }
+            )
+
+            Spacer(Modifier.height(16.dp))
 
             TaskList(
                 modifier = Modifier.weight(1f),
-                tasks = state.tasks,
+//                tasks = state.tasks,
+                tasks = filteredTasks,
                 onToggleTask = viewModel::toggleTask,
                 onEditTask = onNavigateToEdit,
                 onDeleteTask = viewModel::deleteTask

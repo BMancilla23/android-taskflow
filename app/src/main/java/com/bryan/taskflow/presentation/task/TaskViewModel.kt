@@ -333,4 +333,10 @@ class TaskViewModel @Inject constructor(
             sessionManager.clearSession()
         }
     }
+
+    fun onSearchQueryChange(query: String){
+        _uiState.value = _uiState.value.copy(
+            searchQuery = query
+        )
+    }
 }
