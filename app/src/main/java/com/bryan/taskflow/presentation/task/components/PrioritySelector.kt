@@ -18,7 +18,7 @@ fun PrioritySelector(
             FilterChip(
                 selected = selectedPriority == priority,
                 onClick = {
-                    onPrioritySelected
+                    onPrioritySelected(priority)
                 },
                 label = {
                     Text(priority.displayName())
