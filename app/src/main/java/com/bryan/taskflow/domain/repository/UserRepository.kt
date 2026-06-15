@@ -17,4 +17,9 @@ interface UserRepository {
     suspend fun getUserByEmail(
         email: String
     ): User?
+
+    suspend fun getUserById(
+        userId: Long
+    ): User?
+
 }

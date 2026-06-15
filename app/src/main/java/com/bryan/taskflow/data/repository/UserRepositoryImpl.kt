@@ -64,4 +64,8 @@ class UserRepositoryImpl(private val userDao: UserDao): UserRepository{
         return userDao.getByEmail(email)?.toDomain()
     }
 
+    override suspend fun getUserById(userId: Long): User? {
+        return userDao.getById(userId)?.toDomain()
+    }
+
 }

@@ -17,4 +17,13 @@ interface UserDao {
     )suspend fun getByEmail(
         email: String
     ): UserEntity?
+
+    @Query(
+        """
+            SELECT * FROM users WHERE id = :userId LIMIT 1
+        """
+    )
+    suspend fun getById(
+        userId: Long
+    ): UserEntity?
 }
