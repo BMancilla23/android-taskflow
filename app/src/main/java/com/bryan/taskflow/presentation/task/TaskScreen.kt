@@ -1,34 +1,16 @@
 package com.bryan.taskflow.presentation.task
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.bryan.taskflow.domain.model.TaskPriority
-import com.bryan.taskflow.domain.model.displayName
 import com.bryan.taskflow.presentation.task.components.TaskList
+import com.bryan.taskflow.ui.components.ScreenLayout
 
 @Composable
 fun TaskScreen(
@@ -41,7 +23,8 @@ fun TaskScreen(
     // by evita usar .value
     val state by viewModel.uiState.collectAsState() // Conectar Stateflow con Compose
 
-    Scaffold(
+    ScreenLayout(
+        title = "Mis tareas",
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToCreate
@@ -50,28 +33,21 @@ fun TaskScreen(
             }
         }
     ) { padding ->
+
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
         ) {
-
-            Text(
-                text = "Mis tareas", style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
-
             TaskList(
+                modifier = Modifier.weight(1f),
                 tasks = state.tasks,
                 onToggleTask = viewModel::toggleTask,
                 onEditTask = onNavigateToEdit,
                 onDeleteTask = viewModel::deleteTask
             )
-
         }
+
     }
 
 }

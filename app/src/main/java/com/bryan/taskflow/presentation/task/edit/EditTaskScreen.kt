@@ -1,9 +1,12 @@
 package com.bryan.taskflow.presentation.task.edit
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import com.bryan.taskflow.presentation.task.TaskViewModel
 import com.bryan.taskflow.presentation.task.components.TaskForm
+import com.bryan.taskflow.ui.components.ScreenLayout
 
 @Composable
 fun EditTaskScreen(
@@ -17,17 +20,25 @@ fun EditTaskScreen(
     }
 
    val state by viewModel.uiState.collectAsState()
-    TaskForm(
-     title = state.newTaskTitle,
-        description = state.newTaskDescription,
-        priority = state.selectedPriority,
-        buttonText = "Actualizar tarea",
-        onTitleChange = viewModel::onTaskTitleChange,
-        onDescriptionChange = viewModel::onTaskDescriptionChange,
-        onPriorityChange = viewModel::onPriorityChange,
-        onSave = {
-            viewModel.updateTask()
-            onNavigateBack()
-        }
-    )
+
+    ScreenLayout(
+        title = "Editar tarea",
+        onNavigateBack = onNavigateBack
+    ) {
+        padding ->
+        TaskForm(
+            modifier = Modifier.padding(padding),
+            title = state.newTaskTitle,
+            description = state.newTaskDescription,
+            priority = state.selectedPriority,
+            buttonText = "Actualizar tarea",
+            onTitleChange = viewModel::onTaskTitleChange,
+            onDescriptionChange = viewModel::onTaskDescriptionChange,
+            onPriorityChange = viewModel::onPriorityChange,
+            onSave = {
+                viewModel.updateTask()
+                onNavigateBack()
+            }
+        )
+    }
 }

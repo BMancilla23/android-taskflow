@@ -20,6 +20,7 @@ import com.bryan.taskflow.domain.model.displayName
 
 @Composable
 fun TaskForm(
+    modifier: Modifier = Modifier,
     title: String,
     description: String,
     priority: TaskPriority,
@@ -30,9 +31,7 @@ fun TaskForm(
     onSave: () -> Unit
 ){
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = modifier.fillMaxSize().padding(16.dp)
     ) {
 
         OutlinedTextField(

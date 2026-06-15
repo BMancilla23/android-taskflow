@@ -9,6 +9,7 @@ import com.bryan.taskflow.domain.model.Task
 
 @Composable
 fun TaskList(
+    modifier: Modifier = Modifier,
     tasks: List<Task>,
     onToggleTask: (Long) -> Unit,
     onEditTask: (Long) -> Unit,
@@ -16,7 +17,7 @@ fun TaskList(
 ){
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
 
         ) {
             items(tasks){
