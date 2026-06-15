@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +32,7 @@ fun TaskScreen(
     // Cuando uiState cambia, la pantalla se recompone automáticamente.
     // by evita usar .value
     val state by viewModel.uiState.collectAsState() // Conectar Stateflow con Compose
+    val pendingTasks = state.tasks.count { !it.isCompleted }
 
     ScreenLayout(
         title = "Mis tareas",
@@ -55,17 +56,30 @@ fun TaskScreen(
     ) { padding ->
 
         Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-            .padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
         ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Bienvenido, ${state.username}",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Spacer(
+                    modifier = Modifier.height(4.dp)
+                )
+                Text(
+                    text = "${state.tasks.size} tareas • $pendingTasks pendientes",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-            Text(
-                text = "Hola, ${state.username}",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
+
             TaskList(
                 modifier = Modifier.weight(1f),
                 tasks = state.tasks,
