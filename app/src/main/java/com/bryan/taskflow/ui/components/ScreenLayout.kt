@@ -1,6 +1,7 @@
 package com.bryan.taskflow.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 fun ScreenLayout(
     title: String,
     onNavigateBack: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
     floatingActionButton: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -36,7 +38,8 @@ fun ScreenLayout(
                             )
                         }
                     }
-                }
+                },
+                actions = actions
             )
         },
         floatingActionButton = {
