@@ -2,6 +2,7 @@ package com.bryan.taskflow.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -9,6 +10,7 @@ import com.bryan.taskflow.presentation.login.LoginScreen
 import com.bryan.taskflow.presentation.register.RegisterScreen
 import com.bryan.taskflow.presentation.splash.SplashScreen
 import com.bryan.taskflow.presentation.task.TaskScreen
+import com.bryan.taskflow.presentation.task.TaskViewModel
 import com.bryan.taskflow.presentation.task.create.CreateTaskScreen
 import com.bryan.taskflow.presentation.task.edit.EditTaskScreen
 
@@ -69,8 +71,9 @@ fun AppNavHost() {
         }
 
         composable(Screen.Tasks.route){
+            val viewModel: TaskViewModel = hiltViewModel()
             TaskScreen(
-                viewModel = hiltViewModel(),
+                viewModel = viewModel,
                 onNavigateToCreate = {
                     navController.navigate(Screen.CreateTask.route
                     )
@@ -80,6 +83,14 @@ fun AppNavHost() {
                     navController.navigate(
                         Screen.EditTask.createRoute(taskId)
                     )
+                },
+                onLogout = {
+                    viewModel.logout()
+                    navController.navigate(Screen.Login.route){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
                 }
 
             )

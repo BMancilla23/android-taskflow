@@ -11,5 +11,5 @@ data class TaskUiState(
     val isLoading: Boolean = false,
     val error: String? = null,
 
-    val editingTask: Task? = null
+    val username: String = ""
 )

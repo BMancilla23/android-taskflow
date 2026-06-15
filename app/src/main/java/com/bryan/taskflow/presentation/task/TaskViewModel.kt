@@ -6,6 +6,7 @@ import com.bryan.taskflow.data.session.SessionManager
 import com.bryan.taskflow.domain.model.Task
 import com.bryan.taskflow.domain.model.TaskPriority
 import com.bryan.taskflow.domain.repository.TaskRepository
+import com.bryan.taskflow.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskRepository: TaskRepository,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val userRepository: UserRepository
 ): ViewModel(){
     // Estado interno mutabla
     // Solo el ViewModel puede modificarlo
@@ -55,7 +57,24 @@ class TaskViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadUser()
         loadTasks()
+    }
+
+    private fun loadUser(){
+        viewModelScope.launch {
+            val userId = sessionManager
+                .getUserId()
+                .firstOrNull()
+                ?: return@launch
+
+            val user = userRepository.getUserById(userId)
+                ?: return@launch
+
+            _uiState.value = _uiState.value.copy(
+                username = user.fullName
+            )
+        }
     }
 
     private fun loadTasks(){
@@ -307,5 +326,11 @@ class TaskViewModel @Inject constructor(
                 newTaskDescription = "",
                 selectedPriority = TaskPriority.MEDIUM
             )
+    }
+
+    fun logout(){
+        viewModelScope.launch {
+            sessionManager.clearSession()
+        }
     }
 }
